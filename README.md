@@ -1,48 +1,18 @@
-# <img src="src/docs/asciidoc/images/spring-framework.png" width="80" height="80"> Spring Framework
+## spring-framework
 
-This is the home of the Spring Framework, the foundation for all
-[Spring projects](https://spring.io/projects). Together the Spring Framework and the family of Spring projects make up what we call "Spring". 
+### How it play
 
-Spring provides everything you need beyond the Java language to create enterprise
-applications in a wide range of scenarios and architectures. Please read the
-[Overview](https://docs.spring.io/spring/docs/current/spring-framework-reference/overview.html#spring-introduction)
-section in the reference for a more complete introduction.
+1. git clone https://github.com/bohenmian/spring
+2. open IDEA --> File --> New --> Open
+3. choose build.gradle，open it
 
-## Code of Conduct
+### Spring相关组件阅读笔记
 
-This project is governed by the [Spring Code of Conduct](CODE_OF_CONDUCT.adoc).
-By participating you are expected to uphold this code.
-Please report unacceptable behavior to spring-code-of-conduct@pivotal.io.
+### 注意
 
-## Access to Binaries
+1. 导入的时候可能会报错`Error:Kotlin:[Internal Error]java.lang.IllegalStateException`，升级Kotlin的版本即可
+2. 导入Spring-beans项目时，报错`org.springframework.beans.factory.support.CglibSubclassingInstantiationStrategy`编译报错，
+提示缺少`org.springframework.cglib.*.*`等类，原因是因为为了避免包冲突所以spring把最新的cglib和objenesis给repack了，
+在gradle界面中的Tasks中other中run cglibRepackJar和objenesisRepackJar即可导入jar包
 
-For access to artifacts or a distribution zip, see the
-[Spring Framework Artifacts](https://github.com/spring-projects/spring-framework/wiki/Spring-Framework-Artifacts)
-wiki page.
 
-## Documentation
-
-The Spring Frameworks maintains reference documentation
-([published](http://docs.spring.io/spring-framework/docs/current/spring-framework-reference/) and
-[source](src/docs/asciidoc)),
-Github [wiki pages](https://github.com/spring-projects/spring-framework/wiki), and an
-[API reference](http://docs.spring.io/spring-framework/docs/current/javadoc-api/).
-There are also [guides and tutorials](https://spring.io/guides) across Spring projects.
-
-## Build from Source
-
-See the [Build from Source](https://github.com/spring-projects/spring-framework/wiki/Build-from-Source)
-wiki page and also [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## Stay in Touch
-
-Follow [@SpringCentral](https://twitter.com/springcentral),
-[@SpringFramework](https://twitter.com/springframework), and its
-[team members](https://twitter.com/springframework/lists/team/members) on Twitter.
-In-depth articles can be found at [The Spring Blog](http://spring.io/blog/),
-and releases are announced via our [news feed](http://spring.io/blog/category/news).
-
-## License
-
-The Spring Framework is released under version 2.0 of the
-[Apache License](http://www.apache.org/licenses/LICENSE-2.0).
