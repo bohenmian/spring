@@ -7,13 +7,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Main {
 
-//	@Test
-//	public void testApplicationContext() {
-//
-//
-//	}
-
-	public static void main(String[] args) {
+	@Test
+	public void testApplicationContext() {
 
 		ApplicationContext context = new ClassPathXmlApplicationContext("com/bohenmian/application.xml");
 
@@ -22,4 +17,5 @@ public class Main {
 		System.out.println(messageService.getMessage());
 
 	}
+
 }
