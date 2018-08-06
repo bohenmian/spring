@@ -122,14 +122,26 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 */
 	@Override
 	protected final void refreshBeanFactory() throws BeansException {
+		// 如果ApplicationContext已经加载过bean了,销毁所有的bean,关闭BeanFactory
+		// 应用中的BeanFactory有多个,这个不是指的全局的BeanFactory有多少个,而是指当前的ApplicationContext是否有BeanFactory
 		if (hasBeanFactory()) {
+			//如果已经加载过Bean,那么销毁所有Bean,关闭所有Bean
 			destroyBeans();
 			closeBeanFactory();
 		}
 		try {
+			// 初始化一个DefaultListableBeanFactory
+			// DefaultListableBeanFactory继承于AbstractAutowireCapableBeanFactory和实现了ConfigurableListableBeanFactory
+			// 所有DefaultListableBeanFactory拥有了ListableBeanFactory,HierarchicalBeanFactory和AutowireCapableBeanFactory的属性
 			DefaultListableBeanFactory beanFactory = createBeanFactory();
+
+			//用于BeanFactory的序列化
 			beanFactory.setSerializationId(getId());
+
+			//设置bean的两个配置属性: 是否允许bean被覆盖,是否允许循环引用
 			customizeBeanFactory(beanFactory);
+
+			//加载Bean到BeanFactory中
 			loadBeanDefinitions(beanFactory);
 			synchronized (this.beanFactoryMonitor) {
 				this.beanFactory = beanFactory;
@@ -172,6 +184,7 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 
 	@Override
 	public final ConfigurableListableBeanFactory getBeanFactory() {
+		//这里需要加锁,因为这个方法被多处引用
 		synchronized (this.beanFactoryMonitor) {
 			if (this.beanFactory == null) {
 				throw new IllegalStateException("BeanFactory not initialized or already closed - " +
@@ -223,9 +236,13 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 */
 	protected void customizeBeanFactory(DefaultListableBeanFactory beanFactory) {
 		if (this.allowBeanDefinitionOverriding != null) {
+			//是否允许bean被覆盖
+			//同一文件中配置两个相同的bean会报错,但是在不同的xml文件中配置相同名称的bean id,name那么就会发生覆盖现象
 			beanFactory.setAllowBeanDefinitionOverriding(this.allowBeanDefinitionOverriding);
 		}
 		if (this.allowCircularReferences != null) {
+			//是否允许bean被循环引用
+			//Spring中允许传递依赖,不允许直接依赖
 			beanFactory.setAllowCircularReferences(this.allowCircularReferences);
 		}
 	}

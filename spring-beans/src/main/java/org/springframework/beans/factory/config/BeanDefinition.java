@@ -37,6 +37,7 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.beans.factory.support.RootBeanDefinition
  * @see org.springframework.beans.factory.support.ChildBeanDefinition
  */
+//Bean在代码层面上可以认为是BeanDefinition的实例
 public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
@@ -44,6 +45,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * <p>Note that extended bean factories might support further scopes.
 	 * @see #setScope
 	 */
+	//设置Bean的scope
 	String SCOPE_SINGLETON = ConfigurableBeanFactory.SCOPE_SINGLETON;
 
 	/**
@@ -85,6 +87,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * Set the name of the parent definition of this bean definition, if any.
 	 */
+	//设置父Bean的名称
 	void setParentName(@Nullable String parentName);
 
 	/**
@@ -123,6 +126,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * @see #SCOPE_SINGLETON
 	 * @see #SCOPE_PROTOTYPE
 	 */
+	//设置bean的scope
 	void setScope(@Nullable String scope);
 
 	/**
@@ -137,6 +141,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * <p>If {@code false}, the bean will get instantiated on startup by bean
 	 * factories that perform eager initialization of singletons.
 	 */
+	//设置是否是懒加载
 	void setLazyInit(boolean lazyInit);
 
 	/**
@@ -169,6 +174,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * Return whether this bean is a candidate for getting autowired into some other bean.
 	 */
+	// 该bean是否可以注册到其他bean中去
 	boolean isAutowireCandidate();
 
 	/**
@@ -250,6 +256,8 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * returned on all calls.
 	 * @see #SCOPE_SINGLETON
 	 */
+
+	//是否singleton
 	boolean isSingleton();
 
 	/**
@@ -258,11 +266,13 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * @since 3.0
 	 * @see #SCOPE_PROTOTYPE
 	 */
+	//是否prototype
 	boolean isPrototype();
 
 	/**
 	 * Return whether this bean is "abstract", that is, not meant to be instantiated.
 	 */
+	//是否抽象
 	boolean isAbstract();
 
 	/**

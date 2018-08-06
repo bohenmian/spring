@@ -71,6 +71,7 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 	 * @see #setConfigLocations
 	 * @see #afterPropertiesSet()
 	 */
+	//如果已经有ApplicationContext并需要配置成父子关系则调用这个方法
 	public ClassPathXmlApplicationContext(ApplicationContext parent) {
 		super(parent);
 	}
@@ -81,6 +82,7 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 	 * @param configLocation resource location
 	 * @throws BeansException if context creation failed
 	 */
+	//ClassPathXmlApplicationContext读取xml文件时调用这个方法
 	public ClassPathXmlApplicationContext(String configLocation) throws BeansException {
 		this(new String[] {configLocation}, true, null);
 	}
@@ -138,9 +140,11 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 			String[] configLocations, boolean refresh, @Nullable ApplicationContext parent)
 			throws BeansException {
 
+		//传入配置文件时parent为null,如果是传入ApplicationContext的方法则会调用super
 		super(parent);
 		setConfigLocations(configLocations);
 		if (refresh) {
+			//Spring的核心方法,调用refresh()会将原来的ApplicationContext销毁,然后会重新执行一次初始化操作
 			refresh();
 		}
 	}

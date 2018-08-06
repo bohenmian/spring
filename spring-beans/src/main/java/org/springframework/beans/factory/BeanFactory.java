@@ -113,6 +113,8 @@ import org.springframework.lang.Nullable;
  * @see DisposableBean#destroy
  * @see org.springframework.beans.factory.support.RootBeanDefinition#getDestroyMethodName
  */
+
+//Bean容器中获取bean的顶层类,每次只能获取单个bean
 public interface BeanFactory {
 
 	/**
@@ -258,6 +260,7 @@ public interface BeanFactory {
 	 * @see #getBean
 	 * @see #isPrototype
 	 */
+	//判断bean是否是单例的,后面会用到
 	boolean isSingleton(String name) throws NoSuchBeanDefinitionException;
 
 	/**

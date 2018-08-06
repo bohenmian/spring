@@ -412,7 +412,9 @@ public class BeanDefinitionParserDelegate {
 	 */
 	@Nullable
 	public BeanDefinitionHolder parseBeanDefinitionElement(Element ele, @Nullable BeanDefinition containingBean) {
+		// bean id属性
 		String id = ele.getAttribute(ID_ATTRIBUTE);
+		// bean name属性(一个name属性中可以定义多个属性值)
 		String nameAttr = ele.getAttribute(NAME_ATTRIBUTE);
 
 		List<String> aliases = new ArrayList<>();
@@ -423,6 +425,7 @@ public class BeanDefinitionParserDelegate {
 
 		String beanName = id;
 		if (!StringUtils.hasText(beanName) && !aliases.isEmpty()) {
+			// 如果没有指定id,那么用别名的以一个名字作为id
 			beanName = aliases.remove(0);
 			if (logger.isTraceEnabled()) {
 				logger.trace("No XML 'id' specified - using '" + beanName +
@@ -434,10 +437,12 @@ public class BeanDefinitionParserDelegate {
 			checkNameUniqueness(beanName, aliases, ele);
 		}
 
+		//将解析xml文件的信息新生成一个beanDefinition
 		AbstractBeanDefinition beanDefinition = parseBeanDefinitionElement(ele, beanName, containingBean);
 		if (beanDefinition != null) {
 			if (!StringUtils.hasText(beanName)) {
 				try {
+					// 因为是首次注册,这里额containingBean是等于null的
 					if (containingBean != null) {
 						beanName = BeanDefinitionReaderUtils.generateBeanName(
 								beanDefinition, this.readerContext.getRegistry(), true);
@@ -451,6 +456,7 @@ public class BeanDefinitionParserDelegate {
 						if (beanClassName != null &&
 								beanName.startsWith(beanClassName) && beanName.length() > beanClassName.length() &&
 								!this.readerContext.getRegistry().isBeanNameInUse(beanClassName)) {
+							// 将beanClassName设置为Bean的别名
 							aliases.add(beanClassName);
 						}
 					}
@@ -465,6 +471,7 @@ public class BeanDefinitionParserDelegate {
 				}
 			}
 			String[] aliasesArray = StringUtils.toStringArray(aliases);
+			// 返回BeanDefinitionHolder
 			return new BeanDefinitionHolder(beanDefinition, beanName, aliasesArray);
 		}
 
@@ -512,8 +519,10 @@ public class BeanDefinitionParserDelegate {
 		}
 
 		try {
+			// 创建beanDefinition
 			AbstractBeanDefinition bd = createBeanDefinition(className, parent);
 
+			//设置beanDefinition的一系列属性
 			parseBeanDefinitionAttributes(ele, beanName, containingBean, bd);
 			bd.setDescription(DomUtils.getChildElementValueByTagName(ele, DESCRIPTION_ELEMENT));
 
