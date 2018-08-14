@@ -536,7 +536,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// 子类可以在这一步的时候添加一些特殊的BeanFactoryPostProcessor的实现类
 				postProcessBeanFactory(beanFactory);
 
-				// Invoke factory processors registered as beans in the context.
+				// Invoke factory processors registered as beans in the context.BeanFactoryPostProcessor
 				// 调用BeanFactoryPostProcessor各个实现类的postProcessBeanFactory(beanFactory)方法
 				invokeBeanFactoryPostProcessors(beanFactory);
 
@@ -564,6 +564,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				// Instantiate all remaining (non-lazy-init) singletons.
 				// 初始化所有的singleton beans(不是lazy-init,抽象的,且是单例的)
+				// 到这里BeanFactory已经创建完成了,并且所有实现BeanFactoryPostProcessor接口的bean都已经初始化并且postProcessBeanFactory已经得到回调
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
@@ -646,7 +647,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see #getBeanFactory()
 	 */
 	protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
-		//关闭久的beanFactory(如果有),创建新的BeanFactory,加载bean定义,注册bean信息
+		//关闭旧的beanFactory(如果有),创建新的BeanFactory,加载bean定义,注册bean信息
 		refreshBeanFactory();
 		return getBeanFactory();
 	}
@@ -896,7 +897,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.setTempClassLoader(null);
 
 		// Allow for caching all bean definition metadata, not expecting further changes.
-		// 这里Spring 已经开始预初始化bean了,不希望bean的配置信息再发生改变
+		// 这里Spring 已经开始预初始化bean了,不希望bean的配置信息再发生改变(出现bean的解析,加载,注册)
 		beanFactory.freezeConfiguration();
 
 		// Instantiate all remaining (non-lazy-init) singletons.

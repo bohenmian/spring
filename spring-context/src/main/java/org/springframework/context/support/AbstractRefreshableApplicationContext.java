@@ -132,7 +132,7 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 		try {
 			// 初始化一个DefaultListableBeanFactory
 			// DefaultListableBeanFactory继承于AbstractAutowireCapableBeanFactory和实现了ConfigurableListableBeanFactory
-			// 所有DefaultListableBeanFactory拥有了ListableBeanFactory,HierarchicalBeanFactory和AutowireCapableBeanFactory的属性
+			// 所以DefaultListableBeanFactory拥有了ListableBeanFactory,HierarchicalBeanFactory和AutowireCapableBeanFactory的属性
 			DefaultListableBeanFactory beanFactory = createBeanFactory();
 
 			//用于BeanFactory的序列化

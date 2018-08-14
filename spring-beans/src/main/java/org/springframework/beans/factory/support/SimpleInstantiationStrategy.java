@@ -57,9 +57,13 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 	}
 
 
+	// 实例化bean的具体逻辑
 	@Override
 	public Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner) {
 		// Don't override the class with CGLIB if no overrides.
+		// 如果方法不存在覆写,就采用Java反射进行实例化,否则采用Cglib实例化(采用动态代理生成对象?)
+		// Cglib动态代理是对指定的业务类生成一个子类,并覆盖其中的方法实现代理,采用的是继承的方法
+		// 所以Spring中有限采用的是JDK动态代理,如果业务类不是一个接口才采用Cglib动态代理
 		if (!bd.hasMethodOverrides()) {
 			Constructor<?> constructorToUse;
 			synchronized (bd.constructorArgumentLock) {
@@ -84,10 +88,12 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 					}
 				}
 			}
+			// 利用构造方法进行实例化
 			return BeanUtils.instantiateClass(constructorToUse);
 		}
 		else {
 			// Must generate CGLIB subclass.
+			// 存在方法覆写,利用Cglib来完成实例化,需要依赖于Cglib生成子类
 			return instantiateWithMethodInjection(bd, beanName, owner);
 		}
 	}

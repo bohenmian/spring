@@ -803,7 +803,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		for (String beanName : beanNames) {
 			// 合并父bean的配置
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
-			// 如果bean是非抽象的,单例的,非懒加载的那么可以初始化这个bean
+			// 如果bean是非抽象的,单例的,非懒加载的那么可以初始化这个bean(为什么说bean是单例的)
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
 				if (isFactoryBean(beanName)) {
 					//如果是FactoryBean的话在前面加上&再调用getBean()
@@ -834,7 +834,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 
 		// Trigger post-initialization callback for all applicable beans...
-		//如果bean是SmartInitializingSingleton的实例,在这里进行回调
+		// 到这里所有的单例的,非抽象的,非懒加载的bean都已经初始化
+		// 如果bean是SmartInitializingSingleton的实例,在这里进行回调
 		for (String beanName : beanNames) {
 			Object singletonInstance = getSingleton(beanName);
 			if (singletonInstance instanceof SmartInitializingSingleton) {
@@ -907,8 +908,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			this.beanDefinitionMap.put(beanName, beanDefinition);
 		}
 		//判断是否有其他的bean开始初始化了,同时嵌套这么多方法只是为了解析xml信息到BeanFactory和注册Bean,Bean还是没有初始化
-		//在Spring 容器启动后会预初始化所有的bean
+		//在Spring容器启动后会预初始化所有的bean
 		else {
+			//如果已经有其他的bean开始初始化了
 			if (hasBeanCreationStarted()) {
 				// Cannot modify startup-time collection elements anymore (for stable iteration)
 				synchronized (this.beanDefinitionMap) {
