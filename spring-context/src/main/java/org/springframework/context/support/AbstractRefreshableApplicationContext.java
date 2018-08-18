@@ -125,7 +125,7 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 		// 如果ApplicationContext已经加载过bean了,销毁所有的bean,关闭BeanFactory
 		// 应用中的BeanFactory有多个,这个不是指的全局的BeanFactory有多少个,而是指当前的ApplicationContext是否有BeanFactory
 		if (hasBeanFactory()) {
-			//如果已经加载过Bean,那么销毁所有Bean,关闭所有Bean
+			//如果已经加载过Bean,那么销毁所有Bean,关闭BeanFactory
 			destroyBeans();
 			closeBeanFactory();
 		}

@@ -564,6 +564,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// Eagerly cache singletons to be able to resolve circular references
 		// even when triggered by lifecycle interfaces like BeanFactoryAware.
 		// 解决循环依赖
+		// 是否需要需要提前暴露创建的bean factory(这个工厂正好返回刚刚完成实例化的bean,还没有进行属性注入): 单例&&允许循环依赖&&bean正在创建中
+		// Spring解决getter/setter方法注入bean循环依赖是将未注入属性的A暴露给容器(Wrap),开始为A注入属性,发现需要B,调用getBean(B)
+		// 实例化B并注入属性,发现需要A的时候,从单例缓存中查找,如果没有找到继续从容器中找(Wrap),两个中随意一个找到都能解决循环依赖
+		// 递归完成回到A的初始化过程,A将B注入成功,并注入A的其他属性值
 		boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
 				isSingletonCurrentlyInCreation(beanName));
 		if (earlySingletonExposure) {
@@ -571,6 +575,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				logger.trace("Eagerly caching bean '" + beanName +
 						"' to allow for resolving potential circular references");
 			}
+			// bean初始化完成前将创建实例的ObjectFactory加入工厂
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
 
@@ -1440,6 +1445,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		for (String propertyName : propertyNames) {
 			if (containsBean(propertyName)) {
 				// 通过判断属性的名称分别注入
+				// 初始化所依赖的bean(getBean方法),getBean方法中getSingleton会先从缓存池中拿到需要的bean,如果存在循环依赖而缓存池中有,那么循环依赖就解决了
+				// 如果在缓存池中没有拿到,那么异常将会发生在无法满足bean创建的依赖中,抛出BeanCurrentlyInCreationException
 				Object bean = getBean(propertyName);
 				pvs.add(propertyName, bean);
 				registerDependentBean(propertyName, beanName);

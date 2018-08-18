@@ -564,7 +564,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				// Instantiate all remaining (non-lazy-init) singletons.
 				// 初始化所有的singleton beans(不是lazy-init,抽象的,且是单例的)
-				// 到这里BeanFactory已经创建完成了,并且所有实现BeanFactoryPostProcessor接口的bean都已经初始化并且postProcessBeanFactory已经得到回调
+				// 到这里BeanFactory已经初始化(IOC容器),并且所有实现BeanFactoryPostProcessor接口的bean中的postProcessBeanFactory已经得到回调
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
