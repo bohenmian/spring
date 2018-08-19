@@ -178,7 +178,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		Object singletonObject = this.singletonObjects.get(beanName);
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
 			synchronized (this.singletonObjects) {
-				// earlySingletonObjects: 执行工厂方法生成的bean,再bean的创建过程中可以通过getBean方法获取到
+				// earlySingletonObjects: 执行工厂方法生成的bean,在bean的创建过程中可以通过getBean方法获取到
 				singletonObject = this.earlySingletonObjects.get(beanName);
 				if (singletonObject == null && allowEarlyReference) {
 					// singletonFactories: 保存bean name和创建工厂之间关系的map

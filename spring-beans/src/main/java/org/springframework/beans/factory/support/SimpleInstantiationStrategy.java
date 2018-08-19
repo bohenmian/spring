@@ -63,13 +63,14 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 		// Don't override the class with CGLIB if no overrides.
 		// 如果方法不存在覆写,就采用Java反射进行实例化,否则采用Cglib实例化(采用动态代理生成对象?)
 		// Cglib动态代理是对指定的业务类生成一个子类,并覆盖其中的方法实现代理,采用的是继承的方法
-		// 所以Spring中有限采用的是JDK动态代理,如果业务类不是一个接口才采用Cglib动态代理
+		// 所以Spring中有优先采用的是JDK动态代理,如果业务类不是一个接口才采用Cglib动态代理
 		if (!bd.hasMethodOverrides()) {
 			Constructor<?> constructorToUse;
 			synchronized (bd.constructorArgumentLock) {
 				constructorToUse = (Constructor<?>) bd.resolvedConstructorOrFactoryMethod;
 				if (constructorToUse == null) {
 					final Class<?> clazz = bd.getBeanClass();
+					// 实例化一个接口将会抛出异常
 					if (clazz.isInterface()) {
 						throw new BeanInstantiationException(clazz, "Specified class is an interface");
 					}
@@ -79,6 +80,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 									(PrivilegedExceptionAction<Constructor<?>>) clazz::getDeclaredConstructor);
 						}
 						else {
+							// 通过反射获得bean的无参构造方法
 							constructorToUse =	clazz.getDeclaredConstructor();
 						}
 						bd.resolvedConstructorOrFactoryMethod = constructorToUse;

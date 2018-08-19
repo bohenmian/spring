@@ -275,6 +275,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			//检查beanDefinition在容器中是否存在
 			if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
 				// Not found -> check parent.
+				// 去父类中查询bean是否存在
 				String nameToLookup = originalBeanName(name);
 				if (parentBeanFactory instanceof AbstractBeanFactory) {
 					return ((AbstractBeanFactory) parentBeanFactory).doGetBean(
@@ -330,7 +331,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				// 这里代表这个bean的依赖已经初始化完成了
 				// Bean如果是Singleton scope, 那么创建singleton实例
 				if (mbd.isSingleton()) {
-					// getSingleton()
+					// getSingleton()先从缓存池查找bean是否存在,可以解决有getter/setter造成的循环依赖问题
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
 							//创建bean
@@ -353,6 +354,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					Object prototypeInstance = null;
 					try {
 						beforePrototypeCreation(beanName);
+						// prototype类型的bean是直接创建的,不会调用getSingleton()去缓冲池中查找bean是否存在,所以prototype类型的bean的循环依赖是无法解决的
 						prototypeInstance = createBean(beanName, mbd, args);
 					}
 					finally {
