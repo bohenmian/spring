@@ -258,6 +258,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 							"n bean '" + beanName + "'");
 				}
 			}
+			// 获取给定bean的实例对象,主要是完成FactoryBean的相关处理
 			bean = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
 

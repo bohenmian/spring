@@ -280,6 +280,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	}
 
 	@SuppressWarnings("unchecked")
+	// 实现属性的依赖注入功能
 	private void processKeyedProperty(PropertyTokenHolder tokens, PropertyValue pv) {
 		Object propValue = getPropertyHoldingValue(tokens);
 		PropertyHandler ph = getLocalPropertyHandler(tokens.actualName);
@@ -306,6 +307,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 					Object newArray = Array.newInstance(componentType, arrayIndex + 1);
 					System.arraycopy(propValue, 0, newArray, 0, length);
 					setPropertyValue(tokens.actualName, newArray);
+					// 获取属性值,该方法内部使用JDK的内省机制,调用属性的getter/setter方法获取属性的值
 					propValue = getPropertyValue(tokens.actualName);
 				}
 				Array.set(propValue, arrayIndex, convertedValue);

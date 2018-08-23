@@ -85,8 +85,10 @@ public abstract class PropertiesLoaderUtils {
 
 		InputStream stream = null;
 		Reader reader = null;
+		// 将配置文件中的属性写入一个Properties对象中
 		try {
 			String filename = resource.getResource().getFilename();
+			// 如果file以xml结尾
 			if (filename != null && filename.endsWith(XML_FILE_EXTENSION)) {
 				stream = resource.getInputStream();
 				persister.loadFromXml(props, stream);

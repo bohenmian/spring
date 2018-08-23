@@ -152,6 +152,7 @@ public abstract class PropertiesLoaderSupport {
 		}
 
 		if (this.localProperties != null) {
+			// 如果本地配置存在,那么多个属性文件循环读取,如果key相同则覆盖
 			for (Properties localProp : this.localProperties) {
 				CollectionUtils.mergePropertiesIntoMap(localProp, result);
 			}
@@ -159,6 +160,7 @@ public abstract class PropertiesLoaderSupport {
 
 		if (!this.localOverride) {
 			// Load properties from file afterwards, to let those properties override.
+			// 加载properties文件
 			loadProperties(result);
 		}
 
@@ -173,11 +175,13 @@ public abstract class PropertiesLoaderSupport {
 	 */
 	protected void loadProperties(Properties props) throws IOException {
 		if (this.locations != null) {
+			// 获取每个resource文件的路径
 			for (Resource location : this.locations) {
 				if (logger.isTraceEnabled()) {
 					logger.trace("Loading properties file from " + location);
 				}
 				try {
+					// 通过IO读取资源文件
 					PropertiesLoaderUtils.fillProperties(
 							props, new EncodedResource(location, this.fileEncoding), this.propertiesPersister);
 				}

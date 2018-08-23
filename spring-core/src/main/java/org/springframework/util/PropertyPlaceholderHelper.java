@@ -124,15 +124,20 @@ public class PropertyPlaceholderHelper {
 		return parseStringValue(value, placeholderResolver, new HashSet<>());
 	}
 
+	// 解析属性值${}的方法
 	protected String parseStringValue(
 			String value, PlaceholderResolver placeholderResolver, Set<String> visitedPlaceholders) {
 
 		StringBuilder result = new StringBuilder(value);
 
+		// 获取占位符前缀"${"的位置索引startIndex
 		int startIndex = value.indexOf(this.placeholderPrefix);
+		// 如果"${"存在
 		while (startIndex != -1) {
+			// 从"${"后面开始获取占位符后缀"}"的位置索引endIndex
 			int endIndex = findPlaceholderEndIndex(result, startIndex);
 			if (endIndex != -1) {
+				// 截取startIndex和endIndex中间的部分
 				String placeholder = result.substring(startIndex + this.placeholderPrefix.length(), endIndex);
 				String originalPlaceholder = placeholder;
 				if (!visitedPlaceholders.add(originalPlaceholder)) {
@@ -142,14 +147,21 @@ public class PropertyPlaceholderHelper {
 				// Recursive invocation, parsing placeholders contained in the placeholder key.
 				placeholder = parseStringValue(placeholder, placeholderResolver, visitedPlaceholders);
 				// Now obtain the value for the fully resolved key...
+				// 从Properties中获取对应的属性值propVal
+				// 这里分割出来是"datasource.username:root"这个整体
 				String propVal = placeholderResolver.resolvePlaceholder(placeholder);
+				// 如果propVal值不存在
 				if (propVal == null && this.valueSeparator != null) {
 					int separatorIndex = placeholder.indexOf(this.valueSeparator);
 					if (separatorIndex != -1) {
 						String actualPlaceholder = placeholder.substring(0, separatorIndex);
+						// 通过:分割出属性中配置的默认值
 						String defaultValue = placeholder.substring(separatorIndex + this.valueSeparator.length());
+						// 从Properties中获取属性值
+						// 这里分割出来是datasource.username和root
 						propVal = placeholderResolver.resolvePlaceholder(actualPlaceholder);
 						if (propVal == null) {
+							// 如果再propVal在Properties中的属性值为null,那么就用默认值
 							propVal = defaultValue;
 						}
 					}

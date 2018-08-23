@@ -534,6 +534,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// Allows post-processing of the bean factory in context subclasses.
 				// 提供给子类的扩展点,到这里所有的bean都注册,加载完成了,但是都没有初始化
 				// 子类可以在这一步的时候添加一些特殊的BeanFactoryPostProcessor的实现类
+				// PropertyPlaceholderConfigurer是其实现类(用来做${}属性的解析)
 				postProcessBeanFactory(beanFactory);
 
 				// Invoke factory processors registered as beans in the context.BeanFactoryPostProcessor
@@ -647,7 +648,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see #getBeanFactory()
 	 */
 	protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
-		//关闭旧的beanFactory(如果有),创建新的BeanFactory,加载bean定义,注册bean信息
+		// 关闭旧的beanFactory(如果有),创建新的BeanFactory,加载bean定义,注册bean信息
+		// 委派设计模式,父类定义抽象的refreshBeanFactory方法,具体的实现由子类实现
 		refreshBeanFactory();
 		return getBeanFactory();
 	}

@@ -75,6 +75,7 @@ public class BeanDefinitionVisitor {
 	 * @param beanDefinition the BeanDefinition object to traverse
 	 * @see #resolveStringValue(String)
 	 */
+	// 在这里BeanDefinition已经注册到BeanFactory了,只是没有实例化
 	public void visitBeanDefinition(BeanDefinition beanDefinition) {
 		visitParentName(beanDefinition);
 		visitBeanClassName(beanDefinition);
@@ -143,7 +144,9 @@ public class BeanDefinitionVisitor {
 
 	protected void visitPropertyValues(MutablePropertyValues pvs) {
 		PropertyValue[] pvArray = pvs.getPropertyValues();
+		// 获取Bean中定义的标签,解析每一个标签的属性值s
 		for (PropertyValue pv : pvArray) {
+			// 解析属性值
 			Object newVal = resolveValue(pv.getValue());
 			if (!ObjectUtils.nullSafeEquals(newVal, pv.getValue())) {
 				pvs.add(pv.getName(), newVal);
@@ -172,6 +175,7 @@ public class BeanDefinitionVisitor {
 	@SuppressWarnings("rawtypes")
 	@Nullable
 	protected Object resolveValue(@Nullable Object value) {
+		// 对value的属性判断
 		if (value instanceof BeanDefinition) {
 			visitBeanDefinition((BeanDefinition) value);
 		}
@@ -210,6 +214,7 @@ public class BeanDefinitionVisitor {
 		else if (value instanceof Map) {
 			visitMap((Map) value);
 		}
+		// 解析字符串
 		else if (value instanceof TypedStringValue) {
 			TypedStringValue typedStringValue = (TypedStringValue) value;
 			String stringValue = typedStringValue.getValue();

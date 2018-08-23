@@ -74,15 +74,18 @@ public abstract class PropertyResourceConfigurer extends PropertiesLoaderSupport
 	 * {@linkplain #processProperties process} properties against the given bean factory.
 	 * @throws BeanInitializationException if any properties cannot be loaded
 	 */
+	// 在Spring解析bean配置文件为BeanDefinition,并加载到BeanFactory后调用
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 		try {
+			// 加载配置文件到Properties
 			Properties mergedProps = mergeProperties();
 
 			// Convert the merged properties, if necessary.
 			convertProperties(mergedProps);
 
 			// Let the subclass process the properties.
+			// 解析$等占位符属性值
 			processProperties(beanFactory, mergedProps);
 		}
 		catch (IOException ex) {

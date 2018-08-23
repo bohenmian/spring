@@ -142,6 +142,7 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 			customizeBeanFactory(beanFactory);
 
 			//加载Bean到BeanFactory中
+			//委派设计模式,当前类定义抽象方法,具体的实现交给子类去实现
 			loadBeanDefinitions(beanFactory);
 			synchronized (this.beanFactoryMonitor) {
 				this.beanFactory = beanFactory;
