@@ -1,4 +1,4 @@
-package com.bohenmian.service;
+package com.bohenmian.ioc.service;
 
 public interface MessageService {
 

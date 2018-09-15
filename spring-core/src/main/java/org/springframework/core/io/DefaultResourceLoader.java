@@ -151,13 +151,16 @@ public class DefaultResourceLoader implements ResourceLoader {
 			}
 		}
 
+		// 匹配/开头的路径,如/resources/application.xml
 		if (location.startsWith("/")) {
 			return getResourceByPath(location);
 		}
+		// 匹配文件路径以classpath:开头的
 		else if (location.startsWith(CLASSPATH_URL_PREFIX)) {
 			return new ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());
 		}
 		else {
+			// 尝试解析其他路径
 			try {
 				// Try to parse the location as a URL...
 				URL url = new URL(location);

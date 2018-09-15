@@ -1,6 +1,6 @@
-package com.bohenmian;
+package com.bohenmian.ioc;
 
-import com.bohenmian.service.MessageService;
+import com.bohenmian.ioc.service.MessageService;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -10,7 +10,7 @@ public class Main {
 	@Test
 	public void testApplicationContext() {
 
-		ApplicationContext context = new ClassPathXmlApplicationContext("com/bohenmian/application.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("com/bohenmian/spring_ioc.xml");
 
 		MessageService messageService = (MessageService) context.getBean("messageService");
 

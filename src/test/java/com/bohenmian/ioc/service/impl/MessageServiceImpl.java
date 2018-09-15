@@ -1,6 +1,6 @@
-package com.bohenmian.service.impl;
+package com.bohenmian.ioc.service.impl;
 
-import com.bohenmian.service.MessageService;
+import com.bohenmian.ioc.service.MessageService;
 
 public class MessageServiceImpl implements MessageService {
 
