@@ -10,7 +10,7 @@ public class Main {
 	@Test
 	public void testApplicationContext() {
 
-		ApplicationContext context = new ClassPathXmlApplicationContext("com/bohenmian/spring_ioc.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("com/bohenmian/spring-ioc.xml");
 
 		MessageService messageService = (MessageService) context.getBean("messageService");
 

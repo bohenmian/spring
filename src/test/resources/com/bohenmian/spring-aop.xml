@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="userServiceImpl" class="com.bohenmian.aop.service.impl.UserServiceImpl"/>
+
+	<bean id="logArgAdvice" class="com.bohenmian.aop.aspect.LogArgAdvice"/>
+	<bean id="logResultAdvice" class="com.bohenmian.aop.aspect.LogResultAdvice"/>
+
+	<!-- 每个advisor内部持有advice,advisor负责配置,advice负责实现拦截请求-->
+	<bean id="logArgAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="advice" ref="logArgAdvice"/>
+		<property name="pattern" value="com.bohenmian.aop.service.*.create.*"/>
+	</bean>
+
+	<bean id="logResultAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="advice" ref="logResultAdvice"/>
+		<property name="pattern" value="com.bohenmian.aop.service.*.query.*"/>
+	</bean>
+
+	<!-- 配置DefaultAdvisorAutoProxyCreator使所有的advisor生效 -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+
+</beans>

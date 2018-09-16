@@ -12,7 +12,7 @@ dependencies {
 	compile(project(":spring-web"))
 	compile(project(":spring-webmvc"))
 	compile(project(":spring-websocket"))
-	optional(project(":spring-webflux"))
+	compile(project(":spring-webflux"))
 	optional(project(":spring-aop"))
 	optional(project(":spring-beans"))
 	optional(project(":spring-context"))
