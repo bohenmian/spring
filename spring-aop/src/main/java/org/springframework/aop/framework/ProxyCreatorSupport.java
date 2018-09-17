@@ -43,6 +43,7 @@ public class ProxyCreatorSupport extends AdvisedSupport {
 	/**
 	 * Create a new ProxyCreatorSupport instance.
 	 */
+	// 创建一个默认的AopProxyFactory工厂,这里使用了简单工厂模式,给予一个创建代理对象的工厂,具体采用什么代理方法由参数决定
 	public ProxyCreatorSupport() {
 		this.aopProxyFactory = new DefaultAopProxyFactory();
 	}

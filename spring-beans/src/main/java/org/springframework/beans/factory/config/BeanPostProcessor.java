@@ -40,6 +40,7 @@ import org.springframework.lang.Nullable;
  * @see ConfigurableBeanFactory#addBeanPostProcessor
  * @see BeanFactoryPostProcessor
  */
+// 在spring实例化bean完成的前后对该接口的两个方法进行调用
 public interface BeanPostProcessor {
 
 	/**

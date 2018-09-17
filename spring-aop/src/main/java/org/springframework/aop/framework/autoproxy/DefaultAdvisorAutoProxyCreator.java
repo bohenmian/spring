@@ -36,6 +36,7 @@ import org.springframework.lang.Nullable;
  * @author Rob Harrop
  */
 @SuppressWarnings("serial")
+// 实现动态代理的类,DefaultAdvisorAutoProxyCreator是BeanPostProcessor的实现类,BeanPostProcessor在Spring容器初始化init-method的前后执行
 public class DefaultAdvisorAutoProxyCreator extends AbstractAdvisorAutoProxyCreator implements BeanNameAware {
 
 	/** Separator between prefix and remainder of bean name. */

@@ -107,6 +107,7 @@ public class ProxyFactory extends ProxyCreatorSupport {
 	 * @return the proxy object
 	 */
 	public Object getProxy(@Nullable ClassLoader classLoader) {
+		// createAopProxy会先创建一个AopProxy实例对象,后面调用AopProxy的getProxy方法来生成代理对象
 		return createAopProxy().getProxy(classLoader);
 	}
 
