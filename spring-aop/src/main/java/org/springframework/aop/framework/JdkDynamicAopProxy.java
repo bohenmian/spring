@@ -155,6 +155,8 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 	 * <p>Callers will see exactly the exception thrown by the target,
 	 * unless a hook method throws an exception.
 	 */
+	// JdkDynamicAopProxy重写了InvocationHandler的invoke方法
+	// 如果没有拦截器则直接调用目标对象的方法,如果有拦截器则执行拦截器再调用目标对象的方法
 	@Override
 	@Nullable
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -216,9 +218,11 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 			}
 			else {
 				// We need to create a method invocation...
+				// 如果有拦截器,那么需要调用拦截器之后才调用目标对象的相应方法
 				// 执行方法得到返回值
 				invocation = new ReflectiveMethodInvocation(proxy, target, method, args, targetClass, chain);
 				// Proceed to the joinpoint through the interceptor chain.
+				// 沿着拦截器链继续前进
 				retVal = invocation.proceed();
 			}
 

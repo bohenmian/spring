@@ -201,6 +201,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 	@Override
 	public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
+		// 将初始化bean的逻辑委派给子类实现
 		return doGetBean(name, requiredType, null, false);
 	}
 

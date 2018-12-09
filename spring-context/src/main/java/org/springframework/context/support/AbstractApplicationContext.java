@@ -522,6 +522,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			//这步完成后,会将配置文件解析成一个个bean的定义,注册到BeanFactory中
 			//这里bean没有初始化,只是将bean的配置文件提取出来了
 			//注册也只是将这些bean定义信息保存到注册中心(BeanName -> BeanDefinition)
+			// 1. bean resource(比如XML文件)的定位过程
+			// 2. BeanDefinition的载入: 把资源文件中定义的bean配置转化为IOC容器中的数据结构(BeanDefinition)
+			// 3. BeanDefinition的注册: 将BeanDefinition注册到IOC容器(BeanDefinitionMap来持有BeanDefinition)
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
@@ -542,6 +545,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
+				// 注册bean的后置处理器,在bean创建过程中调用
 				// BeanPostProcessor的实现类
 				// 该接口有两个方法postProcessBeforeInitialization和postProcessAfterInitialization
 				// 两个方法分别在bean初始化之前和初始化之后执行,到这里bean还是没有初始化
@@ -552,7 +556,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				initMessageSource();
 
 				// Initialize event multicaster for this context.
-				// 初始化ApplicationContext的事件广播器
+				// 初始化ApplicationContext的事件广播器,初始化上下文机制
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.

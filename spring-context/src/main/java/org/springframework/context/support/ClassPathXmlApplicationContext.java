@@ -49,6 +49,8 @@ import org.springframework.util.Assert;
  * @see #getResourceByPath
  * @see GenericApplicationContext
  */
+
+//	存在其他对去bean资源文件的方式,比如File,URL等.Spring也提供了其他资源文件的读取方式
 public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContext {
 
 	@Nullable

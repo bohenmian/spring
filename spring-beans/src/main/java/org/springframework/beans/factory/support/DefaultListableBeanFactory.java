@@ -113,6 +113,7 @@ import org.springframework.util.StringUtils;
  * @see #resolveDependency
  */
 @SuppressWarnings("serial")
+// 常用的IOC容器,包含了IOC容器所具有的所有功能
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
 		implements ConfigurableListableBeanFactory, BeanDefinitionRegistry, Serializable {
 
@@ -140,6 +141,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private String serializationId;
 
 	/** Whether to allow re-registration of a different definition with the same name. */
+	//	当bean name相同时,是否允许bean的覆盖
 	private boolean allowBeanDefinitionOverriding = true;
 
 	/** Whether to allow eager class loading even for lazy-init beans. */
@@ -156,6 +158,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private final Map<Class<?>, Object> resolvableDependencies = new ConcurrentHashMap<>(16);
 
 	/** Map of bean definition objects, keyed by bean name. */
+	//	用来保存bean的map,IOC容器初始化完成后所有的bean都将以KV的形式放到beanDefinitionMap中
 	private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
 
 	/** Map of singleton and non-singleton bean names, keyed by dependency type. */
@@ -877,8 +880,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 		//以前已经注册过的bean,注册后的bean都会放入beanDefinitionMap这个map
 		BeanDefinition existingDefinition = this.beanDefinitionMap.get(beanName);
+
+		// 当IOC容器中已经存在这个bean
 		if (existingDefinition != null) {
-			//是否允许覆盖
+			//是否允许覆盖,如果不允许覆盖则会抛出异常
 			if (!isAllowBeanDefinitionOverriding()) {
 				throw new BeanDefinitionOverrideException(beanName, beanDefinition, existingDefinition);
 			}

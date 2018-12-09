@@ -50,6 +50,7 @@ public class AfterReturningAdviceInterceptor implements MethodInterceptor, After
 	}
 
 
+	// AfterReturningAdvice拦截器,和MethodBeforeAdvice方法类似,afterReturning方法在proceed方法前调用
 	@Override
 	public Object invoke(MethodInvocation mi) throws Throwable {
 		Object retVal = mi.proceed();

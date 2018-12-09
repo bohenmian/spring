@@ -134,7 +134,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		// 获取根节点
 		if (this.delegate.isDefaultNamespace(root)) {
 			// 获取<beans profile = "dev">中的profile环境变量的值
-			// 如果当前环境配置的profile不包含此profile,那就直接return,不对此<beans>刷新
+			// 如果当前环境配置的profile不包含此profile,那就直接return,不对此<beans>解析
 			String profileSpec = root.getAttribute(PROFILE_ATTRIBUTE);
 			if (StringUtils.hasText(profileSpec)) {
 				String[] specifiedProfiles = StringUtils.tokenizeToStringArray(
@@ -181,7 +181,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 				if (node instanceof Element) {
 					Element ele = (Element) node;
 					if (delegate.isDefaultNamespace(ele)) {
-						//解析default namespace下的元素
+						//解析default namespace下的元素,<bean>,<beans>,<alias>,<import>
 						parseDefaultElement(ele, delegate);
 					}  //解析namespace其他元素,如<mvc>,<aop>下的元素
 					else {
