@@ -285,12 +285,15 @@ public class ContextLoader {
 					if (cwac.getParent() == null) {
 						// The context instance was injected without an explicit parent ->
 						// determine parent for root web application context, if any.
+						// 加载父类的上下文
 						ApplicationContext parent = loadParentContext(servletContext);
 						cwac.setParent(parent);
 					}
+					// Web容器通过WebApplicationContext(ApplicationContext的实现类)和BeanFactory联系起来,这里是Web容器初始化IOC容器的具体位置
 					configureAndRefreshWebApplicationContext(cwac, servletContext);
 				}
 			}
+			// 这里将根上下文存储到ServletContext中去,以后应用都是根据这个属性值取得根上下文的
 			servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, this.context);
 
 			ClassLoader ccl = Thread.currentThread().getContextClassLoader();
@@ -328,11 +331,13 @@ public class ContextLoader {
 	 * @see ConfigurableWebApplicationContext
 	 */
 	protected WebApplicationContext createWebApplicationContext(ServletContext sc) {
+		// 判断使用什么样的类在Web容器中作为IOC容器
 		Class<?> contextClass = determineContextClass(sc);
 		if (!ConfigurableWebApplicationContext.class.isAssignableFrom(contextClass)) {
 			throw new ApplicationContextException("Custom context class [" + contextClass.getName() +
 					"] is not of type [" + ConfigurableWebApplicationContext.class.getName() + "]");
 		}
+		// 直接实例化需要产生的IOC容器,并设置IOC容器的各个参数
 		return (ConfigurableWebApplicationContext) BeanUtils.instantiateClass(contextClass);
 	}
 
@@ -345,9 +350,11 @@ public class ContextLoader {
 	 * @see org.springframework.web.context.support.XmlWebApplicationContext
 	 */
 	protected Class<?> determineContextClass(ServletContext servletContext) {
+		// 如果在ServletContext中配置了CONTEXT_CLASS属性,那么就使用这个class
 		String contextClassName = servletContext.getInitParameter(CONTEXT_CLASS_PARAM);
 		if (contextClassName != null) {
 			try {
+				// 通过Class的工具类通过反射生成对象
 				return ClassUtils.forName(contextClassName, ClassUtils.getDefaultClassLoader());
 			}
 			catch (ClassNotFoundException ex) {
@@ -356,6 +363,7 @@ public class ContextLoader {
 			}
 		}
 		else {
+			// 如果没有额外的配置,那么使用默认的ContextClass
 			contextClassName = defaultStrategies.getProperty(WebApplicationContext.class.getName());
 			try {
 				return ClassUtils.forName(contextClassName, ContextLoader.class.getClassLoader());
@@ -382,6 +390,7 @@ public class ContextLoader {
 			}
 		}
 
+		// 设置ServletContext的上下文
 		wac.setServletContext(sc);
 		String configLocationParam = sc.getInitParameter(CONFIG_LOCATION_PARAM);
 		if (configLocationParam != null) {
@@ -397,6 +406,7 @@ public class ContextLoader {
 		}
 
 		customizeContext(sc, wac);
+		// 这里的wac是ConfigurableWebApplicationContext实例,这里相当于调用IOC容器初始化的refresh()方法
 		wac.refresh();
 	}
 

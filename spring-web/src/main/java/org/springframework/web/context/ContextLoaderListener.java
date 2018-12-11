@@ -98,6 +98,9 @@ public class ContextLoaderListener extends ContextLoader implements ServletConte
 	/**
 	 * Initialize the root web application context.
 	 */
+	// IOC容器在web容器中启动的入口,初始化根上下文
+	// ContextLoaderListener#contextInitialized() -> ContextLoader#initWebApplicationContext -> ContextLoader#loadParentContext ->
+	// ContextLoader#createWebApplicationContext()
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		initWebApplicationContext(event.getServletContext());
