@@ -54,6 +54,7 @@ import org.springframework.util.CollectionUtils;
  * @see #setUrlMap
  * @see BeanNameUrlHandlerMapping
  */
+// AbstractUrlHandlerMapping的上层类实现了ApplicationContextAware结尾的接口,会在IOC容器初始化完成的时候回调serApplicationContext
 public class SimpleUrlHandlerMapping extends AbstractUrlHandlerMapping {
 
 	private final Map<String, Object> urlMap = new LinkedHashMap<>();
@@ -102,19 +103,21 @@ public class SimpleUrlHandlerMapping extends AbstractUrlHandlerMapping {
 	@Override
 	public void initApplicationContext() throws BeansException {
 		super.initApplicationContext();
+		// 注册handler
 		registerHandlers(this.urlMap);
 	}
 
 	/**
 	 * Register all handlers specified in the URL map for the corresponding paths.
 	 * @param urlMap a Map with URL paths as keys and handler beans or bean names as values
-	 * @throws BeansException if a handler couldn't be registered
+	 * @throws BeansException if a handler couldn't be registeredsud
 	 * @throws IllegalStateException if there is a conflicting handler registered
 	 */
 	protected void registerHandlers(Map<String, Object> urlMap) throws BeansException {
 		if (urlMap.isEmpty()) {
 			logger.trace("No patterns in " + formatMappingName());
 		}
+		// 这里对bean的配置进行解析,然后调用基类完成注册
 		else {
 			urlMap.forEach((url, handler) -> {
 				// Prepend with slash if not already present.
@@ -125,6 +128,7 @@ public class SimpleUrlHandlerMapping extends AbstractUrlHandlerMapping {
 				if (handler instanceof String) {
 					handler = ((String) handler).trim();
 				}
+				// 注册handler
 				registerHandler(url, handler);
 			});
 			if (logger.isDebugEnabled()) {

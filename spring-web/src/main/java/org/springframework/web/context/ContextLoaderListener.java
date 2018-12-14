@@ -99,6 +99,7 @@ public class ContextLoaderListener extends ContextLoader implements ServletConte
 	 * Initialize the root web application context.
 	 */
 	// IOC容器在web容器中启动的入口,初始化根上下文
+	// 在Web项目中,Web容器是为IOC容器提供宿主环境,这个环境首先需要建立根上下文,根上下文可以持有业务对象,数据存取对象,资源,事务管理器等
 	// ContextLoaderListener#contextInitialized() -> ContextLoader#initWebApplicationContext -> ContextLoader#loadParentContext ->
 	// ContextLoader#createWebApplicationContext()
 	@Override

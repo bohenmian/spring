@@ -275,6 +275,7 @@ public class ContextLoader {
 			// Store context in local instance variable, to guarantee that
 			// it is available on ServletContext shutdown.
 			if (this.context == null) {
+				// 创建一个IOC容器,类似于ClassPathXmlApplicationContext一样的容器
 				this.context = createWebApplicationContext(servletContext);
 			}
 			if (this.context instanceof ConfigurableWebApplicationContext) {
@@ -290,6 +291,7 @@ public class ContextLoader {
 						cwac.setParent(parent);
 					}
 					// Web容器通过WebApplicationContext(ApplicationContext的实现类)和BeanFactory联系起来,这里是Web容器初始化IOC容器的具体位置
+					// 其中调用IOC容器的refresh()方法
 					configureAndRefreshWebApplicationContext(cwac, servletContext);
 				}
 			}

@@ -45,6 +45,7 @@ public class HandlerExecutionChain {
 	@Nullable
 	private HandlerInterceptor[] interceptors;
 
+	// 拦截器链
 	@Nullable
 	private List<HandlerInterceptor> interceptorList;
 
@@ -87,6 +88,7 @@ public class HandlerExecutionChain {
 		return this.handler;
 	}
 
+	// 增加拦截器
 	public void addInterceptor(HandlerInterceptor interceptor) {
 		initInterceptorList().add(interceptor);
 	}

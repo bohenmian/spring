@@ -46,6 +46,7 @@ import org.springframework.util.Assert;
  * @author Juergen Hoeller
  * @see org.springframework.web.context.support.WebApplicationObjectSupport
  */
+// 在Spring IOC容器初始化完成时完成回调
 public abstract class ApplicationObjectSupport implements ApplicationContextAware {
 
 	/** Logger that is available to subclasses. */
@@ -60,6 +61,8 @@ public abstract class ApplicationObjectSupport implements ApplicationContextAwar
 	private MessageSourceAccessor messageSourceAccessor;
 
 
+	// ApplicationObjectSupport是ApplicationContextAware的实现类,重写setApplicationContext会在Spring IOC容器初始化完成时回调
+	// ApplicationContextAwareProcessor中完成回调
 	@Override
 	public final void setApplicationContext(@Nullable ApplicationContext context) throws BeansException {
 		if (context == null && !isContextRequired()) {

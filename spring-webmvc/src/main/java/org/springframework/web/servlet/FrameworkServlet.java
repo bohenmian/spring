@@ -523,7 +523,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		long startTime = System.currentTimeMillis();
 
 		try {
-			// Spring MVC初始化的入口
+			// Spring MVC初始化的入口,在这里初始化上下文
 			this.webApplicationContext = initWebApplicationContext();
 			initFrameworkServlet();
 		}
@@ -554,12 +554,14 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @see #setContextClass
 	 * @see #setContextConfigLocation
 	 */
-	// Spring MVC初始化入口
+	// Spring,MVC初始化入口,这里也是初始化一个容器(注意Web容器,IOC容器和Spring MVC容器之间的区别)
 	protected WebApplicationContext initWebApplicationContext() {
+		// 拿到根上下文,通过WebApplicationContext的工具类来获取
 		WebApplicationContext rootContext =
 				WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		WebApplicationContext wac = null;
 
+		// 如果根上下文存在
 		if (this.webApplicationContext != null) {
 			// A context instance was injected at construction time -> use it
 			wac = this.webApplicationContext;
@@ -573,10 +575,12 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 						// the root application context (if any; may be null) as the parent
 						cwac.setParent(rootContext);
 					}
+					// 调用IOC容器的refresh()方法进行配置和初始化
 					configureAndRefreshWebApplicationContext(cwac);
 				}
 			}
 		}
+		// 下面均是找不到WebXmlApplicationContext的情况
 		if (wac == null) {
 			// No context instance was injected at construction time -> see if one
 			// has been registered in the servlet context. If one exists, it is assumed
@@ -586,6 +590,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		}
 		if (wac == null) {
 			// No context instance is defined for this servlet -> create a local one
+			// 如果根上下文不存在,那么会创建默认的XmlWebApplicationContext作为默认的容器,然后IOC的refresh方法初始化容器
 			wac = createWebApplicationContext(rootContext);
 		}
 
@@ -593,11 +598,16 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 			// Either the context is not a ConfigurableApplicationContext with refresh
 			// support or the context injected at construction time had already been
 			// refreshed -> trigger initial onRefresh manually here.
+			// 不管这个上下文是不是ConfigurableApplicationContext或者在构建时刷新过,都要刷新上下文,完成IOC容器的初始化
 			onRefresh(wac);
 		}
 
 		if (this.publishContext) {
 			// Publish the context as a servlet context attribute.
+			// 将当前上下文存到ServletContext中去
+			// Spring IOC容器的上下文和Spring MVC的上下文都是以Web容器做为根上下文,因为在Spring IOC容器初始化过程中都是通过getBean方法首先去获取父类的上下文
+			// 所以跟上下文定义的bean是可以被各个Servlet持有的上下文得到和共享的
+			// Spring 和 Spring MVC对应的容器也是父子关系
 			String attrName = getServletContextAttributeName();
 			getServletContext().setAttribute(attrName, wac);
 		}
@@ -652,6 +662,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 					"': custom WebApplicationContext class [" + contextClass.getName() +
 					"] is not of type ConfigurableWebApplicationContext");
 		}
+
 		ConfigurableWebApplicationContext wac =
 				(ConfigurableWebApplicationContext) BeanUtils.instantiateClass(contextClass);
 

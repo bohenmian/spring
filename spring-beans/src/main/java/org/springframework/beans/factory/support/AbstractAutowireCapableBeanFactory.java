@@ -430,6 +430,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throws BeansException {
 
 		Object result = existingBean;
+		// 这里会对BeanPostProcessor的实现类进行回调
 		for (BeanPostProcessor beanProcessor : getBeanPostProcessors()) {
 			Object current = beanProcessor.postProcessAfterInitialization(result, beanName);
 			if (current == null) {
@@ -1773,7 +1774,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}, getAccessControlContext());
 		}
 		else {
-			// 如果bean实现了BeanNameAware等以Aware结尾的接口,回调
+			// 如果bean实现了BeanNameAware,BeanClassLoaderAware或BeanFactoryAware接口,回调
 			invokeAwareMethods(beanName, bean);
 		}
 
@@ -1793,7 +1794,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					beanName, "Invocation of init method failed", ex);
 		}
 		if (mbd == null || !mbd.isSynthetic()) {
-			// BeanPostProcessor的postProcessAfterInitialization回调
+			// BeanPostProcessor的postProcessAfterInitialization回调,会对BeanPostProcessor的实现类进行回调,比如ApplicationContextAware
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
 		}
 
