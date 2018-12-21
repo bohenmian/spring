@@ -371,8 +371,10 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 		Connection con = DataSourceUtils.getConnection(obtainDataSource());
 		Statement stmt = null;
 		try {
+			// 这里的实现和JDBC实现一致,ORM框架都是对数据库的JDBC操作做了上层的封装
 			stmt = con.createStatement();
 			applyStatementSettings(stmt);
+			// 调用回调函数得到执行结果,这里是通过数据库的底层实现
 			T result = action.doInStatement(stmt);
 			handleWarnings(stmt);
 			return result;
@@ -380,6 +382,7 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 		catch (SQLException ex) {
 			// Release Connection early, to avoid potential connection pool deadlock
 			// in the case when the exception translator hasn't been initialized yet.
+			// 捕捉到数据库异常,获取sql语句,并释放数据库连接
 			String sql = getSql(action);
 			JdbcUtils.closeStatement(stmt);
 			stmt = null;
@@ -436,6 +439,7 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 			public T doInStatement(Statement stmt) throws SQLException {
 				ResultSet rs = null;
 				try {
+					// 用户定义的数据库操作代码或Spring为用户封装的数据库操作实现
 					rs = stmt.executeQuery(sql);
 					return rse.extractData(rs);
 				}
@@ -1332,6 +1336,7 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 	 * @see org.springframework.jdbc.datasource.DataSourceUtils#applyTransactionTimeout
 	 */
 	protected void applyStatementSettings(Statement stmt) throws SQLException {
+		// 设置执行statement的相关参数,如超时时间
 		int fetchSize = getFetchSize();
 		if (fetchSize != -1) {
 			stmt.setFetchSize(fetchSize);
